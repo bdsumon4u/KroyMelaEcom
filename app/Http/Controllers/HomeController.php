@@ -16,7 +16,7 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        \LaravelFacebookPixel::createEvent('PageView', $parameters = []);
+      //  \LaravelFacebookPixel::createEvent('PageView', $parameters = []);
         $slides = cache()->rememberForever('slides', function () {
             return Slide::whereIsActive(1)->get();
         });

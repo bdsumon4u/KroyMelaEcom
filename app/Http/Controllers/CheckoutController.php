@@ -23,7 +23,7 @@ class CheckoutController extends Controller
     public function __invoke(CheckoutRequest $request)
     {
         if ($request->isMethod('GET')) {
-            \LaravelFacebookPixel::createEvent('AddToCart', $parameters = []);
+            //\LaravelFacebookPixel::createEvent('AddToCart', $parameters = []);
             return view('checkout');
         }
 
@@ -78,7 +78,7 @@ class CheckoutController extends Controller
                 ]),
             ];
 
-            \LaravelFacebookPixel::createEvent('Purchase', ['currency' => 'USD', 'value' => data_get(json_decode($data['data'], true), 'subtotal')]);
+           // \LaravelFacebookPixel::createEvent('Purchase', ['currency' => 'USD', 'value' => data_get(json_decode($data['data'], true), 'subtotal')]);
 
             $order = Order::create($data);
             $user->notify(new OrderPlaced($order));
