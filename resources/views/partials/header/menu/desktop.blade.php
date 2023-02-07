@@ -1,4 +1,4 @@
-<div class="nav-panel__nav-links nav-links">
+<div class="nav-panel__nav-links nav-links mx-auto">
     <ul class="nav-links__list">
         @foreach($menuItems as $item)
         <li class="nav-links__item">

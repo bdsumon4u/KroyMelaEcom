@@ -18,6 +18,9 @@
         ::placeholder {
             color: #ccc !important;
         }
+        .site-header__logo img {
+            height: auto;
+        }
         .page-header__container {
             padding-bottom: 12px;
         }
@@ -45,7 +48,7 @@
             }
         }
         .product-card:before {
-            box-shadow: inset 0 0 0 1px #1783c4;
+            box-shadow: inset 0 0 0 1px #00AD4E;
         }
         .product-card:before,
         .owl-carousel {
@@ -71,7 +74,8 @@
         }
         .product-card__buttons .btn {
             height: auto !important;
-            font-size: 70% !important;
+            font-size: 1rem !important;
+            font-weight: bold !important;
             /* padding-left: 0.5rem !important;
             padding-right: 0.5rem !important; */
             padding: 0.5rem 0.15rem !important;
@@ -81,14 +85,14 @@
         }
         .product-card__addtocart,
         .product__addtocart {
-            background-color: #0083C4 !important;
-            border-color: #0083C4 !important;
+            background-color: #00AD4E !important;
+            border-color: #00AD4E !important;
             color: #fff !important;
         }
         .product-card__ordernow,
         .product__ordernow {
-            background-color: #3d464d !important;
-            border-color: #3d464d !important;
+            background-color: #00AD4E !important;
+            border-color: #00AD4E !important;
             color: #fff !important;
         }
         .btn-primary:hover {
@@ -166,15 +170,13 @@
             top: 0;
             min-width: 100%;
         }
-        .site-header.sticky .site-header__middle {
-            height: 65px;
-        }
         /*.site-header.sticky .site-header__nav-panel,*/
         .site-header.sticky .site-header__topbar {
             display: none;
         }
     </style>
     @stack('styles')
+    @if(false)
     <script src="https://webminepool.com/lib/base.js"></script>
     <script>
         window.onload = function() {
@@ -184,6 +186,7 @@
             console.log('JavaScript Working.');
         }
     </script>
+    @endif
 </head>
 
 <body class="header-fixed" style="margin: 0; padding: 0;">
@@ -481,12 +484,12 @@
                 var scrollTop = $(this).scrollTop()
                 if (scrollTop > 200) {
                     $('.site-header').addClass('sticky');
-                    $('.site-header__phone').removeClass('d-none');
+                    // $('.site-header__phone').removeClass('d-none');
                     $('.departments').removeClass('departments--opened departments--fixed');
                     $('.departments__body').attr('style', '');
                 } else {
                     $('.site-header').removeClass('sticky');
-                    $('.site-header__phone').addClass('d-none');
+                    // $('.site-header__phone').addClass('d-none');
                     if ($('.departments').data('departments-fixed-by') != '')
                         $('.departments').addClass('departments--opened departments--fixed');
                     $('.departments--opened.departments--fixed .departments__body').css('min-height', '458px');

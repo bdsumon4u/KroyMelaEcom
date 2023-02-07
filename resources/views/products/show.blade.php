@@ -113,16 +113,19 @@
                                         </div>
                                         @exp($available = !$product->should_track || $product->stock_count > 0)
                                         <div class="product__buttons d-flex flex-wrap">
-                                            <div class="product__actions-item product__actions-item--addtocart">
+                                            {{-- <div class="product__actions-item product__actions-item--addtocart">
                                                 <button class="btn btn-primary product__addtocart btn-lg btn-block" {{ $available ? '' : 'disabled' }}>Add to cart</button>
-                                            </div>
+                                            </div> --}}
                                             <div class="product__actions-item product__actions-item--ordernow">
-                                                <button class="btn btn-primary product__ordernow btn-lg btn-block" {{ $available ? '' : 'disabled' }}>Order Now</button>
+                                                <button class="btn btn-primary product__ordernow btn-lg btn-block d-flex justify-content-center align-items-center" {{ $available ? '' : 'disabled' }}>
+                                                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M7 8V6a5 5 0 1 1 10 0v2h3a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h3zm0 2H5v10h14V10h-2v2h-2v-2H9v2H7v-2zm2-2h6V6a3 3 0 0 0-6 0v2z"/></svg>
+                                                    <span class="ml-1">অর্ডার করুন</span>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="call-for-order">
+                                <div class="call-for-order text-center">
                                     <img src="{{ asset('call-now-icon-20.jpg') }}" width="135" alt="Call For Order">
                                     <div style="padding: 10px;margin-bottom: 10px;font-weight: bold;color: red;">
                                         {!! implode('<br>', explode(' ', setting('call_for_order'))) !!}
