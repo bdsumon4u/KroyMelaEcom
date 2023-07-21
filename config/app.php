@@ -17,8 +17,11 @@ return [
 
     'orders' => [
         'PROCESSING',
+        'ON HOLD',
         'SHIPPING',
+        'PAYMENT PENDING',
         'COMPLETED',
+        'CANCELLED',
         'RETURNED',
     ],
 
