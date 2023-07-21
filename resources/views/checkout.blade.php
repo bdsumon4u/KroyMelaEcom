@@ -14,11 +14,11 @@
         margin-bottom: 10px;
     }
     .form-control {
-        border: 2px solid #00AD4E;
+        border: 2px solid #4285F4;
     }
     .btn-primary {
-        border-color: #00AD4E;
-        background-color: #00AD4E;
+        border-color: #4285F4;
+        background-color: #4285F4;
     }
     .input-number .form-control:focus {
         box-shadow: none;
