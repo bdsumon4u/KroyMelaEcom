@@ -124,13 +124,31 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Shipping</th>
-                                                    <td class="shipping">{!!  theMoney($data->shipping_cost)  !!}</td>
+                                                    <td class="shipping">
+                                                        <input style="height: auto; padding: 2px 8px;" type="text" name="data[shipping_cost]" value="{!!  $data->shipping_cost ?? 0  !!}" class="form-control">
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                             <tfoot class="checkout__totals-footer">
-                                                <tr>
+                                                {{-- <tr>
                                                     <th>Total</th>
                                                     <td>{!!  theMoney($data->shipping_cost + $data->subtotal)  !!}</td>
+                                                </tr> --}}
+                                                <tr>
+                                                    <th>Advanced</th>
+                                                    <td>
+                                                        <input style="height: auto; padding: 2px 8px;" type="text" name="data[advanced]" value="{!!  $data->advanced ?? 0  !!}" class="form-control">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Discount</th>
+                                                    <td>
+                                                        <input style="height: auto; padding: 2px 8px;" type="text" name="data[discount]" value="{!!  $data->discount ?? 0  !!}" class="form-control">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Payable</th>
+                                                    <td class="shipping">{!!  theMoney($order->data->shipping_cost + $order->data->subtotal - ($order->data->advanced ?? 0) - ($order->data->discount ?? 0))  !!}</td>
                                                 </tr>
                                             </tfoot>
                                         </table>

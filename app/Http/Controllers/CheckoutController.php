@@ -69,13 +69,13 @@ class CheckoutController extends Controller
                 'user_id' => $user->id, // If User Logged In
                 'status' => $status,
                 // Additional Data
-                'data' => json_encode([
+                'data' => [
                     'shipping_area' => $data['shipping'],
                     'shipping_cost' => setting('delivery_charge')->{$data['shipping'] == 'Inside Dhaka' ? 'inside_dhaka' : 'outside_dhaka'} ?? config('services.shipping.'.$data['shipping']),
                     'subtotal'      => is_array($products) ? array_reduce($products, function ($sum, $product) {
                         return $sum += $product['total'];
                     }) : $products->sum('total'),
-                ]),
+                ],
             ];
 
            // \LaravelFacebookPixel::createEvent('Purchase', ['currency' => 'USD', 'value' => data_get(json_decode($data['data'], true), 'subtotal')]);
