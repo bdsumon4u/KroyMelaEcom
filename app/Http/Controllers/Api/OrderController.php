@@ -38,6 +38,12 @@ class OrderController extends Controller
             ->editColumn('price', function ($row) {
                 return $row->data->subtotal + $row->data->shipping_cost;
             })
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="order_id[]" value="' . $row->id . '">';
+            })
+            ->editColumn('name', function ($row) {
+                return "<div class='text-nowrap'>" . $row->name . "<br><span class='text-danger'>" . $row->note . "</span></div>";
+            })
             ->addColumn('actions', function (Order $order) {
                 return '<div class="d-flex justify-content-center">
                     <a href="'.route('admin.orders.show', $order).'" class="btn btn-sm btn-primary px-2 d-block">View</a>
@@ -48,7 +54,7 @@ class OrderController extends Controller
 //            ->filterColumn('created_at', function($query, $keyword) {
 //                $query->where('created_at', 'like', "%" . Carbon::createFromFormat('d-M-Y', $keyword)->format('Y-m-d') ."%");
 //            })
-            ->rawColumns(['created_at', 'actions'])
+            ->rawColumns(['checkbox', 'name', 'created_at', 'actions'])
             ->make(true);
     }
 }

@@ -62,6 +62,7 @@ class ComposerServiceProvider extends ServiceProvider
             'products.show',
             'admin.layouts.master',
             'admin.orders.show',
+            'admin.orders.invoices',
             'user.layouts.master',
             'layouts.light.master',
             'layouts.yellow.master',

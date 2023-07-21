@@ -29,12 +29,33 @@
         <div class="col-sm-12">
             <div class="orders-table">
                 <div class="card rounded-0 shadow-sm">
-                    <div class="card-header p-3"><strong>All Orders</strong></div>
+                    <div class="card-header p-3">
+                        <strong>All Orders</strong>
+                        <div class="row d-none">
+                            <div class="col-auto">
+                                {{-- <select name="status" id="status" class="form-control form-control-sm">
+                                    <option value="">Change Status</option>
+                                    @foreach(config('app.orders', []) as $status)
+                                    <option value="{{ $status }}">{{ $status }}</option>
+                                    @endforeach
+                                </select> --}}
+                            </div>
+                            <div class="col">
+                                {{-- <button type="button" onclick="changeStatus()">Update</button> --}}
+                            </div>
+                            <div class="col-auto">
+                                <button onclick="printInvoice()" id="invoice" class="btn btn-sm btn-primary float-right">Invoice</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body p-3">
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover datatable" style="width: 100%;">
                                 <thead>
                                 <tr>
+                                    <th style="max-width: 5%">
+                                        <input type="checkbox" name="check_all">
+                                    </th>
                                     <th width="80">ID</th>
                                     <th style="min-width: 80px;">DateTime</th>
                                     <th style="min-width: 120px;">Name</th>
@@ -63,6 +84,25 @@
 
 @push('scripts')
     <script>
+        var checked_count = 0;
+        function updateBulkMenu() {
+            var total = $('[name="order_id[]"]').length;
+            checked_count = $('[name="order_id[]"]:checked').length;
+            $('[name="check_all"]').prop('checked', checked_count === total);
+            if (checked_count > 0) {
+                $('.card-header > .row').removeClass('d-none');
+                $('.card-header > strong').addClass('d-none');
+            } else {
+                $('.card-header > .row').addClass('d-none');
+                $('.card-header > strong').removeClass('d-none');
+            }
+        }
+        $('[name="check_all"]').on('change', function () {
+            var checked = $(this).prop('checked');
+            $('[name="order_id[]"]').prop('checked', checked);
+            updateBulkMenu();
+        });
+
         var table = $('.datatable').DataTable({
             search: [
                 {
@@ -106,6 +146,7 @@
             serverSide: true,
             ajax: "{!! route('api.orders', request()->query()) !!}",
             columns: [
+                { data: 'checkbox', name: 'checkbox', sortable: false, searchable: false},
                 { data: 'id', name: 'id' },
                 { data: 'created_at', name: 'created_at' },
                 { data: 'name', name: 'name' },
@@ -125,7 +166,7 @@
                     var th = $(this.header()).parents('thead').find('tr').eq(1).find('th').eq(i);
                     $(th).empty();
 
-                    if ($.inArray(i, [1, 5, 7]) === -1) {
+                    if ($.inArray(i, [0, 2, 6, 8]) === -1) {
                         var column = this;
                         var input = document.createElement("input");
                         input.classList.add('form-control', 'border-primary');
@@ -146,6 +187,15 @@
             // pageLength: 1,
         });
 
+        setInterval(() => {
+            $(document).find('[name="order_id[]"]').off('change', updateBulkMenu);
+            $(document).find('[name="order_id[]"]').on('change', updateBulkMenu);
+        }, 500);
+        function printInvoice() {
+            window.open('{{ route('admin.orders.invoices') }}?order_id=' + $('[name="order_id[]"]:checked').map(function () {
+                return $(this).val();
+            }).get().join(','), '_blank');
+        }
 
         // $('.datatable thead tr').clone(true).appendTo( '.datatable thead' );
         // $('.datatable thead tr th').each( function (i) {
