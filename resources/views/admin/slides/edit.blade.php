@@ -36,6 +36,7 @@
                         </div>
                         <div class="form-group">
                             <div class="checkbox checkbox-secondary">
+                                <input type="hidden" name="is_active" value="0">
                                 <x-checkbox name="is_active" value="1" :checked="$slide->is_active" />
                                 <x-label for="is_active" />
                             </div>
