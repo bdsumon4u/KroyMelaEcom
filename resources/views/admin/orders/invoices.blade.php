@@ -38,11 +38,12 @@
     .invoice {
         page-break-after: avoid;
         padding-top: 3rem;
-        min-height: 50vh;
-        height: 50%;
+        height: 33%;
     }
     .page-break {
         page-break-after: always;
+    }
+    .bt {
         border-top: 2px dashed #000;
     }
     .page-body p {
@@ -53,11 +54,11 @@
   </head>
   <body class="light-only" main-theme-layout="ltr">
     @foreach ($orders as $order)
-        <div class="invoice {{ ($loop->index & 1) ? 'page-break' : 'pb-5' }}">
+        <div class="invoice {{ ['page-break bt', 'pb-2', 'bt pb-2'][$loop->iteration % 3] }}">
             <div>
                 <div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <div class="media">
                                 <div class="media-left">
                                     <img class="media-object" src="{{asset($logo->mobile)}}" alt="" width="180" height="54">
@@ -70,7 +71,7 @@
                             </div>
                             <!-- End Info-->
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-6">
                             <div class="text-md-right">
                                 <h3>Invoice #<span class="digits counter">{{ $order->id }}</span></h3>
                                 <p>
@@ -85,7 +86,7 @@
                 <hr>
                 <!-- End InvoiceTop-->
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-6">
                         <div class="media">
                             <div class="media-body m-l-20">
                                 <h6 class="mb-0">Customer Information:</h6>
@@ -95,7 +96,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-6">
                         <div class="text-md-right" id="project">
                             <h6>Note</h6>
                             <p>{{ $order->note ?? 'N/A' }}</p>
