@@ -91,6 +91,7 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
+        abort_if(request()->user()->role_id, 403, 'Not Allowed.');
         $products = is_array($order->products) ? $order->products : get_object_vars($order->products);
         array_map(function ($product) {
             if ($product = Product::find($product->id)) {

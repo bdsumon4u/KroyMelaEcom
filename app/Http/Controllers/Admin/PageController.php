@@ -88,6 +88,7 @@ class PageController extends Controller
      */
     public function destroy(Page $page)
     {
+        abort_if(request()->user()->role_id, 403, 'Not Allowed.');
         $page->delete();
         return back()->withSuccess('Page Deleted.');
     }

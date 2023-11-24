@@ -115,6 +115,7 @@ class SlideController extends Controller
      */
     public function destroy(Slide $slide)
     {
+        abort_if(request()->user()->role_id, 403, 'Not Allowed.');
         Storage::disk('public')->delete(Str::after($slide->mobile_src, 'storage'));
         Storage::disk('public')->delete(Str::after($slide->desktop_src, 'storage'));
         $slide->delete();

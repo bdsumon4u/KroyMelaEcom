@@ -75,6 +75,7 @@ class CategoryMenuController extends Controller
      */
     public function destroy(CategoryMenu $categoryMenu)
     {
+        abort_if(request()->user()->role_id, 403, 'Not Allowed.');
         return DB::transaction(function () use ($categoryMenu) {
             $categoryMenu->childrens()->delete();
             $categoryMenu->delete();

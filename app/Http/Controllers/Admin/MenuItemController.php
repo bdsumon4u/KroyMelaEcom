@@ -97,6 +97,7 @@ class MenuItemController extends Controller
      */
     public function destroy(MenuItem $menuItem)
     {
+        abort_if(request()->user()->role_id, 403, 'Not Allowed.');
         $menuItem->delete();
         return back()->withSuccess('Menu Item Deleted.');
     }

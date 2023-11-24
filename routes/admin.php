@@ -32,6 +32,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function() {
         Route::any('settings', 'SettingController')->name('settings');
         Route::get('/orders/invoices', 'OrderController@invoices')->name('orders.invoices');
         Route::resources([
+            'staffs'        => 'StaffController',
             'slides'        => 'SlideController',
             'categories'    => 'CategoryController',
             'brands'        => 'BrandController',

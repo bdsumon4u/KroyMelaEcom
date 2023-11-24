@@ -104,6 +104,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        abort_if(request()->user()->role_id, 403, 'Not Allowed.');
         $product->delete();
 
         return request()->ajax()

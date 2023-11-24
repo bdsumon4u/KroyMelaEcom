@@ -98,6 +98,7 @@ class HomeSectionController extends Controller
      */
     public function destroy(HomeSection $homeSection)
     {
+        abort_if(request()->user()->role_id, 403, 'Not Allowed.');
         $homeSection->delete();
 
         return back()->withSuccess('Section Has Been Deleted.');

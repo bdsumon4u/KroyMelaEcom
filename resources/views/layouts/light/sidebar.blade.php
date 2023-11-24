@@ -142,6 +142,13 @@
               <span>Menus</span>
             </a>
           </li>
+
+          <li>
+            <a class="nav-link menu-title link-nav {{ Route::currentRouteName()=='admin.staffs.index' ? 'active' : '' }}" href="{{route('admin.staffs.index')}}">
+              <i data-feather="users"> </i>
+              <span>Staffs</span>
+            </a>
+          </li>
         </ul>
       </div>
       <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>
