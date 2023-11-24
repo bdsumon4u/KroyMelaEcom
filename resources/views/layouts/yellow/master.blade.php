@@ -19,7 +19,7 @@
             color: #ccc !important;
         }
         .site-header__logo img {
-            height: auto;
+            /* height: auto; */
         }
         .page-header__container {
             padding-bottom: 12px;
