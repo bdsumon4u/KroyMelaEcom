@@ -28,7 +28,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return $this->view();
+        return $this->view([
+            'orders' => Order::where('phone', $order->phone)->where('id', '!=', $order->id)->orderBy('id', 'desc')->get(),
+        ]);
     }
 
     /**

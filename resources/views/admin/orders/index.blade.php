@@ -63,6 +63,7 @@
                                     <th style="min-width: 250px;">Address</th>
                                     <th width="10">Price</th>
                                     <th width="10">Status</th>
+                                    <th width="10">Staff</th>
                                     <th width="10" class="text-center">Action</th>
                                 </tr>
                                 </thead>
@@ -134,7 +135,7 @@
                     type: 'num',
                     orderable: false,
                     searchable: false,
-                    targets: -3
+                    targets: -4
                 },
                 {
                     orderable: false,
@@ -154,6 +155,7 @@
                 { data: 'address', name: 'address' },
                 { data: 'price', name: 'price' },
                 { data: 'status', name: 'status' },
+                { data: 'admin_id', name: 'admin_id' },
                 { data: 'actions', name: 'actions' },
             ],
             initComplete: function () {
@@ -166,7 +168,7 @@
                     var th = $(this.header()).parents('thead').find('tr').eq(1).find('th').eq(i);
                     $(th).empty();
 
-                    if ($.inArray(i, [0, 2, 6, 8]) === -1) {
+                    if ($.inArray(i, [0, 2, 6, 8, 9]) === -1) {
                         var column = this;
                         var input = document.createElement("input");
                         input.classList.add('form-control', 'border-primary');

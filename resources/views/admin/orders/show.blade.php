@@ -70,6 +70,31 @@
                         <!-- End Invoice Holder-->
                     </div>
                 </div>
+                <div class="card-footer d-print-none">
+                    <h5 class="text-center">Old Orders</h5>
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Product</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($orders as $order)
+                                @foreach ($order->products as $product)
+                                    <tr>
+                                        <td>{{ $order->created_at->format('d-M-Y') }}</td>
+                                        <td>{{ $order->status }}</td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $order->note }}</td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

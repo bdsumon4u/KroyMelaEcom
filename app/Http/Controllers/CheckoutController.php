@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CheckoutRequest;
 use App\Notifications\User\AccountCreated;
 use App\Notifications\User\OrderPlaced;
+use App\Admin;
 use App\Order;
 use App\Product;
 use App\User;
@@ -62,6 +63,14 @@ class CheckoutController extends Controller
                 })->toArray();
 
             $data['products'] = json_encode($products);
+            $oldOrders = Order::select(['id', 'admin_id', 'status'])->where('phone', $data['phone'])->get();
+            $adminIds = $oldOrders->pluck('admin_id')->unique()->toArray();
+            $adminQ = Admin::where('role_id', 1)->where('is_active', true)->inRandomOrder();
+            if (count($adminIds) > 0) {
+                $data['admin_id'] = $adminQ->whereIn('id', $adminIds)->first()->id ?? $adminQ->first()->id ?? null;
+            } else {
+                $data['admin_id'] = $adminQ->first()->id ?? null;
+            }
             $user = $this->getUser($data);
             $status = !auth('user')->user() ? 'PROCESSING' // PENDING
                 : data_get(config('app.orders', []), 0, 'PROCESSING'); // Default Status
@@ -70,6 +79,10 @@ class CheckoutController extends Controller
                 'status' => $status,
                 // Additional Data
                 'data' => [
+                    'is_repeat'     => $oldOrders->count() > 0,
+                    'is_fraud'      => $oldOrders->filter(function ($order) {
+                        return $order->status == 'CANCELLED' || $order->status == 'RETURNED';
+                    })->count() > 0,
                     'shipping_area' => $data['shipping'],
                     'shipping_cost' => setting('delivery_charge')->{$data['shipping'] == 'Inside Dhaka' ? 'inside_dhaka' : 'outside_dhaka'} ?? config('services.shipping.'.$data['shipping']),
                     'subtotal'      => is_array($products) ? array_reduce($products, function ($sum, $product) {

@@ -7,8 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'user_id', 'name', 'phone', 'email', 'address', 'status', 'products', 'note', 'data',
+        'admin_id', 'user_id', 'name', 'phone', 'email', 'address', 'status', 'products', 'note', 'data',
     ];
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
+    }
 
     public function getProductsAttribute($products)
     {
