@@ -31,6 +31,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function() {
             ->name('password.change');
         Route::any('settings', 'SettingController')->name('settings');
         Route::get('/orders/invoices', 'OrderController@invoices')->name('orders.invoices');
+        Route::get('/orders/stead-fast', 'OrderController@steadFast')->name('orders.stead-fast');
         Route::resources([
             'staffs'        => 'StaffController',
             'slides'        => 'SlideController',

@@ -57,6 +57,14 @@ class OrderController extends Controller
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" name="order_id[]" value="' . $row->id . '">';
             })
+            ->addColumn('stead_fast', function ($row) {
+                if (!($row->data->consignment_id ?? false) || !($row->data->tracking_code ?? false)) return '';
+
+                return '
+                    <div style="white-space: nowrap;">Consignment ID: <a href="https://www.steadfast.com.bd/consignment/'.$row->data->consignment_id.'" target="_blank">'.$row->data->consignment_id.'</a></div>
+                    <div style="white-space: nowrap;">Tracking Code: <a href="https://www.steadfast.com.bd/?tracking_code='.$row->data->tracking_code.'" target="_blank">'.$row->data->tracking_code.'</a></div>
+                ';
+            })
             ->editColumn('name', function ($row) {
                 return "<div class='text-nowrap'>" . $row->name . "<br><span class='text-danger'>" . $row->note . "</span></div>";
             })
@@ -70,7 +78,7 @@ class OrderController extends Controller
             //            ->filterColumn('created_at', function($query, $keyword) {
             //                $query->where('created_at', 'like', "%" . Carbon::createFromFormat('d-M-Y', $keyword)->format('Y-m-d') ."%");
             //            })
-            ->rawColumns(['checkbox', 'name', 'created_at', 'actions'])
+            ->rawColumns(['checkbox', 'name', 'stead_fast', 'created_at', 'actions'])
             ->make(true);
     }
 }

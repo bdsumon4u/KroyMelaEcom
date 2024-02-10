@@ -42,6 +42,11 @@ return [
         'Outside Dhaka' => 100,
     ],
 
+    'stdfst' => [
+        'key' => env('STEADFAST_KEY'),
+        'secret' => env('STEADFAST_SECRET'),
+    ],
+
     'logo' => [
         'desktop' => [
             'width' => 260,

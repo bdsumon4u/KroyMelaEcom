@@ -44,7 +44,8 @@
                                 {{-- <button type="button" onclick="changeStatus()">Update</button> --}}
                             </div>
                             <div class="col-auto">
-                                <button onclick="printInvoice()" id="invoice" class="btn btn-sm btn-primary float-right">Invoice</button>
+                                <button onclick="printInvoice()" id="invoice" class="btn btn-sm btn-primary float-right mr-1">Invoice</button>
+                                <button onclick="steadFast()" id="stead-fast" class="btn btn-sm btn-primary float-right ml-1">SteadFast</button>
                             </div>
                         </div>
                     </div>
@@ -61,6 +62,7 @@
                                     <th style="min-width: 120px;">Name</th>
                                     <th style="min-width: 100px;">Phone</th>
                                     <th style="min-width: 250px;">Address</th>
+                                    <th>SteadFast</th>
                                     <th width="10">Price</th>
                                     <th width="10">Status</th>
                                     <th width="10">Staff</th>
@@ -153,6 +155,7 @@
                 { data: 'name', name: 'name' },
                 { data: 'phone', name: 'phone' },
                 { data: 'address', name: 'address' },
+                { data: 'stead_fast', name: 'stead_fast' },
                 { data: 'price', name: 'price' },
                 { data: 'status', name: 'status' },
                 { data: 'admin_id', name: 'admin_id' },
@@ -195,6 +198,11 @@
         }, 500);
         function printInvoice() {
             window.open('{{ route('admin.orders.invoices') }}?order_id=' + $('[name="order_id[]"]:checked').map(function () {
+                return $(this).val();
+            }).get().join(','), '_blank');
+        }
+        function steadFast() {
+            window.open('{{ route('admin.orders.stead-fast') }}?order_id=' + $('[name="order_id[]"]:checked').map(function () {
                 return $(this).val();
             }).get().join(','), '_blank');
         }

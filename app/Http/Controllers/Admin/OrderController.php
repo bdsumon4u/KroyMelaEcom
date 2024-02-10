@@ -10,6 +10,8 @@ use App\Product;
 
 class OrderController extends Controller
 {
+    private $base_url = 'https://portal.steadfast.com.bd/api/v1';
+
     /**
      * Display a listing of the resource.
      *
@@ -83,6 +85,52 @@ class OrderController extends Controller
 
         $orders = Order::whereIn('id', $order_ids)->get();
         return view('admin.orders.invoices', compact('orders'));
+    }
+
+    public function steadFast(Request $request)
+    {
+        $request->validate(['order_id' => 'required']);
+        $order_ids = explode(',', $request->order_id);
+        $order_ids = array_map('trim', $order_ids);
+        $order_ids = array_filter($order_ids);
+
+        try {
+            $orders = Order::whereIn('id', $order_ids)->get()->map(function ($order) {
+                return [
+                    'invoice' => $order->id,
+                    'recipient_name' => $order->name ?? 'N/A',
+                    'recipient_address' => $order->address ?? 'N/A',
+                    'recipient_phone' => $order->phone ?? '',
+                    'cod_amount' => $order->data->shipping_cost + $order->data->subtotal - ($order->data->advanced ?? 0) - ($order->data->discount ?? 0),
+                    'note' => '', // $order->note,
+                ];
+            })->toJson();
+    
+            $response = Http::withHeaders([
+                'Api-Key' => config('services.stdfst.key'),
+                'Secret-Key' => config('services.stdfst.secret'),
+                'Content-Type' => 'application/json'
+            ])->post($this->base_url.'/create_order/bulk-order', [
+                'data' => $orders,
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            foreach ($data['data'] ?? [] as $item) {
+                if (!$order = Order::find($item['invoice'])) continue;
+                
+                $order->update([
+                    'data' => [
+                        'consignment_id' => $item['consignment_id'],
+                        'tracking_code' => $item['tracking_code'],
+                    ],
+                ]);
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withDanger($e->getMessage());
+        }
+        
+        return redirect()->back()->withSuccess('Orders are sent to SteadFast.');
     }
 
     /**
