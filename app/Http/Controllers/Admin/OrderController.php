@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Product;
+use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
