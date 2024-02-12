@@ -19,6 +19,10 @@
             color: #000;
         }
 
+        iframe {
+            width: auto !100%;
+        }
+
         @media (max-width: 768px) {
             .product__option-label {
                 display: block;
