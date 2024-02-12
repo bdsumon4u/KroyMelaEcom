@@ -147,7 +147,7 @@
             ],
             processing: true,
             serverSide: true,
-            ajax: "{!! route('api.orders', request()->query()) !!}",
+            ajax: "{!! route('api.orders', request()->query() + ['admin_id' => request()->user()->id, 'role_id' => request()->user()->role_id]) !!}",
             columns: [
                 { data: 'checkbox', name: 'checkbox', sortable: false, searchable: false},
                 { data: 'id', name: 'id' },
