@@ -91,7 +91,9 @@
                             <li class="product__meta-availability w-100 mb-2">
                                 <big>
                                     Availability:
-                                    @if(! $product->should_track)
+                                    @if(! $product->is_active)
+                                        <span class="text-danger">INACTIVE</span>
+                                    @elseif(! $product->should_track)
                                         <span class="text-success">In Stock</span>
                                     @else
                                         <span class="text-{{ $product->stock_count ? 'success' : 'danger' }}">{{ $product->stock_count }} In Stock</span>
@@ -115,7 +117,7 @@
                                                 <div class="input-number__sub"></div>
                                             </div>
                                         </div>
-                                        @exp($available = !$product->should_track || $product->stock_count > 0)
+                                        @exp($available = $product->is_active && (!$product->should_track || $product->stock_count > 0))
                                         <div class="product__buttons d-flex flex-wrap">
                                             {{-- <div class="product__actions-item product__actions-item--addtocart">
                                                 <button class="btn btn-primary product__addtocart btn-lg btn-block" {{ $available ? '' : 'disabled' }}>Add to cart</button>
