@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="d-block">আপনার ফোন নম্বর <span class="text-danger">*</span></label>
-                                        <x-input name="phone" placeholder="Phone Number" :value="$user->phone_number ?? ''" />
+                                        <x-input type="tel" name="phone" placeholder="Phone Number" :value="$user->phone_number ?? ''" />
                                         <x-error field="phone" />
                                     </div>
                                 </div>

@@ -20,7 +20,7 @@
         }
 
         iframe {
-            width: auto !100%;
+            width: 100% !important;
         }
 
         @media (max-width: 768px) {
@@ -42,7 +42,7 @@
 
         img {
             max-width: 100%;
-            height: auto;
+            /* height: auto; */
         }
     </style>
 @endpush
@@ -50,23 +50,14 @@
 @section('title', $product->name)
 
 @section('content')
-
-    @include('partials.page-header', [
-        'paths' => [
-            url('/')                => 'Home',
-            route('products.index') => 'Products',
-        ],
-        'active' => $product->name,
-    ])
-
-    <div class="block">
+    <div class="block mt-1">
         <div class="container">
             <div class="product product--layout--standard" data-layout="standard">
                 <div class="product__content" data-id="{{ $product->id }}" data-max="{{ $product->should_track ? $product->stock_count : -1 }}">
                     <div class="xzoom-container">
                         <img class="xzoom" id="xzoom-default" src="{{ asset($product->base_image->src) }}" xoriginal="{{ asset($product->base_image->src) }}" />
                         <div class="xzoom-thumbs d-flex mt-2">
-                            <a href="{{ asset($product->base_image->src) }}"><img class="xzoom-gallery" width="80" src="{{ asset($product->base_image->src) }}"  xpreview="{{ asset($product->base_image->src) }}"></a>
+                            <a href="{{ asset($product->base_image->src) }}"><img data-detail="{{ route('products.show', $product) }}" class="xzoom-gallery product-base__image" width="80" src="{{ asset($product->base_image->src) }}"  xpreview="{{ asset($product->base_image->src) }}"></a>
                             @foreach($product->additional_images as $image)
                                 <a href="{{ asset($image->src) }}">
                                     <img class="xzoom-gallery" width="80" src="{{ asset($image->src) }}">
@@ -77,7 +68,16 @@
                     <!-- .product__info -->
                     <div class="product__info">
                         <h1 class="product__name">{{ $product->name }}</h1>
-                        <div class="w-100 mb-2 border-top pt-2">Product Code: <strong>{{ $product->sku }}</strong></div>
+                        <div class="w-100 border-top pt-2">Product Code: <strong>{{ $product->sku }}</strong></div>
+                        <div class="w-100 mb-2">Availability:
+                            <strong>
+                                @if(! $product->should_track)
+                                    <span class="text-success">In Stock</span>
+                                @else
+                                    <span class="text-{{ $product->stock_count ? 'success' : 'danger' }}">{{ $product->stock_count }} In Stock</span>
+                                @endif
+                            </strong>
+                        </div>
                         <div class="product__prices {{$product->selling_price == $product->price ? '' : 'has-special'}}">
                             Price:
                             @if($product->selling_price == $product->price)
@@ -87,41 +87,31 @@
                                 <span class="product-card__old-price">{!!  theMoney($product->price)  !!}</span>
                             @endif
                         </div>
-                        <ul class="product__meta">
-                            <li class="product__meta-availability w-100 mb-2">
-                                <big>
-                                    Availability:
-                                    @if(! $product->is_active)
-                                        <span class="text-danger">INACTIVE</span>
-                                    @elseif(! $product->should_track)
-                                        <span class="text-success">In Stock</span>
-                                    @else
-                                        <span class="text-{{ $product->stock_count ? 'success' : 'danger' }}">{{ $product->stock_count }} In Stock</span>
-                                    @endif
-                                </big>
-                            </li>
-                        </ul>
                         <!-- .product__sidebar -->
                         <div class="product__sidebar">
                             <!-- .product__options -->
                             <form class="product__options">
                                 <div class="form-group product__option">
-                                    <label class="product__option-label" for="product-quantity">Quantity</label>
-                                    <div class="product__actions">
-                                        <div class="product__actions-item d-flex justify-content-center">
-                                            <div class="input-number product__quantity">
-                                                <input id="product-quantity"
-                                                       class="input-number__input form-control form-control-lg"
-                                                       type="number" min="1" {{ $product->should_track ? 'max='.$product->stock_count : '' }} value="1">
-                                                <div class="input-number__add"></div>
-                                                <div class="input-number__sub"></div>
-                                            </div>
+                                    {{-- <label class="product__option-label" for="product-quantity">Quantity</label> --}}
+                                    <div class="product__actions-item d-flex justify-content-between align-items-center border-top pt-1">
+                                        <big>পরিমাণ</big>
+                                        <div class="input-number product__quantity">
+                                            <input id="product-quantity"
+                                                    class="input-number__input form-control form-control-lg"
+                                                    type="number" min="1" {{ $product->should_track ? 'max='.$product->stock_count : '' }} value="1">
+                                            <div class="input-number__add"></div>
+                                            <div class="input-number__sub"></div>
                                         </div>
-                                        @exp($available = $product->is_active && (!$product->should_track || $product->stock_count > 0))
-                                        <div class="product__buttons d-flex flex-wrap">
-                                            {{-- <div class="product__actions-item product__actions-item--addtocart">
-                                                <button class="btn btn-primary product__addtocart btn-lg btn-block" {{ $available ? '' : 'disabled' }}>Add to cart</button>
-                                            </div> --}}
+                                    </div>
+                                    <div class="product__actions overflow-hidden">
+                                        @exp($available = !$product->should_track || $product->stock_count > 0)
+                                        <div class="product__buttons w-100">
+                                            <div class="product__actions-item product__actions-item--addtocart">
+                                                <button class="btn btn-primary product__addtocart btn-lg btn-block d-flex justify-content-center align-items-center" {{ $available ? '' : 'disabled' }}>
+                                                    <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M7 8V6a5 5 0 1 1 10 0v2h3a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h3zm0 2H5v10h14V10h-2v2h-2v-2H9v2H7v-2zm2-2h6V6a3 3 0 0 0-6 0v2z"/></svg>
+                                                    <span class="ml-1">কার্টে যোগ করুন</span>
+                                                </button>
+                                            </div>
                                             <div class="product__actions-item product__actions-item--ordernow">
                                                 <button class="btn btn-primary product__ordernow btn-lg btn-block d-flex justify-content-center align-items-center" {{ $available ? '' : 'disabled' }}>
                                                     <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M7 8V6a5 5 0 1 1 10 0v2h3a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1h3zm0 2H5v10h14V10h-2v2h-2v-2H9v2H7v-2zm2-2h6V6a3 3 0 0 0-6 0v2z"/></svg>
@@ -131,11 +121,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="call-for-order text-center">
-                                    <img src="{{ asset('call-now-icon-20.jpg') }}" width="135" alt="Call For Order">
+                                <div class="call-for-order">
+                                    {{-- <img src="{{ asset('call-now-icon-20.jpg') }}" width="135" alt="Call For Order">
                                     <div style="padding: 10px;margin-bottom: 10px;font-weight: bold;color: red;">
                                         {!! implode('<br>', explode(' ', setting('call_for_order'))) !!}
-                                    </div>
+                                    </div> --}}
+                                    @foreach (explode(' ', setting('call_for_order')) as $phone)
+                                        <a href="tel:{{$phone}}" class="btn ptn-primary text-white w-100 mb-1" style="background: #008acf; height: auto;">
+                                            <div>কল করতে ক্লিক করুন</div>
+                                            <div>
+                                                <i class="fa fas fa-phone mr-2"></i>
+                                                <span>{{$phone}}</span>
+                                            </div>
+                                        </a>
+                                    @endforeach
                                 </div>
                             </form><!-- .product__options / end -->
                         </div><!-- .product__end -->
@@ -157,7 +156,7 @@
                         </div>
                     </div><!-- .product__info / end -->
                     <div>
-                        <div class="block-features__list flex-column d-block">
+                        <div class="block-features__list flex-column d-none d-md-block">
                             @if($services = setting('services'))
                                 @foreach(config('services.services', []) as $num => $icon)
                                     <div class="block-features__item">
@@ -188,7 +187,7 @@
                         </a>
                     </div>
                     <div id="collapseOne" class="collapse show" data-parent="#accordion">
-                        <div class="card-body p-4">
+                        <div class="card-body p-2">
                             {!! $product->description !!}
                         </div>
                     </div>
@@ -200,7 +199,7 @@
                         </a>
                     </div>
                     <div id="collapseTwo" class="collapse show" data-parent="#accordion">
-                        <div class="card-body p-4">
+                        <div class="card-body p-2">
                             {!! setting('delivery_text') !!}
                         </div>
                     </div>

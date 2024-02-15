@@ -21,11 +21,11 @@ autocomplete(".aa-input-search", {}, [
                 return `<div class="product-suggestion d-flex">
                 <div class="product-image">
                     <a href="${window.location.origin +
-                        "/products/" +
+                        "/shop/" +
                         slug}"><img src="${base_image}" alt="" width="80" height="80"></a>
                 </div>
                 <div class="product-name"><a href="${window.location.origin +
-                    "/products/" +
+                    "/shop/" +
                     slug}">${_highlightResult.name.value}</a></div>
                 <div class="product-meta ml-auto d-flex flex-column">
                     <div class="product-actions mr-auto" style="width: 110px;">
@@ -54,11 +54,11 @@ autocomplete(".aa-input-search", {}, [
         }
     }
 ]).on('autocomplete:selected', function (event, {slug}, dataset) {
-    window.location = window.location.origin + '/products/' + slug;
+    window.location = window.location.origin + '/shop/' + slug;
     enterPressed = true;
 })
 .on('keyup', function (event) {
     if (event.keyCode == 13 && !enterPressed) {
-        window.location = window.location.origin + '/products?search=' + this.value;
+        window.location = window.location.origin + '/shop?search=' + this.value;
     }
 });

@@ -52,9 +52,12 @@ class ProductController extends Controller
     {
         $product->load(['brand', 'categories']);
         $categories = $product->categories->pluck('id')->toArray();
-        $products = Product::whereHas('categories', function ($query) use ($categories) {
+        $products = Product::whereIsActive(1)
+        ->whereHas('categories', function ($query) use ($categories) {
             $query->whereIn('categories.id', $categories);
-        })->where('id', '!=', $product->id)->limit(config('services.products_count.related', 20))->get();
+        })
+        ->where('id', '!=', $product->id)
+        ->limit(config('services.products_count.related', 20))->get();
       //  \LaravelFacebookPixel::createEvent('ViewContent', $parameters = []);
         return $this->view(compact('products'));
     }
